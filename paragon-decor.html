@@ -9,6 +9,7 @@
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Jost:wght@300;400;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
@@ -123,37 +124,37 @@
     </div>
     <div class="services-grid">
       <div class="service-card">
-        <div class="service-icon">🖌️</div>
+        <div class="service-icon"><i data-lucide="paintbrush"></i></div>
         <h3>Interior Painting</h3>
         <p>Flawless finish on every wall, ceiling and surface. We prep properly, use premium paints, and leave your
           space looking immaculate.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🏠</div>
+        <div class="service-icon"><i data-lucide="house"></i></div>
         <h3>Exterior Painting</h3>
         <p>Weather-resistant coatings and meticulous preparation to protect and beautify your home's exterior for years
           to come.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">📐</div>
+        <div class="service-icon"><i data-lucide="paint-roller"></i></div>
         <h3>Wallpapering</h3>
         <p>Precision hanging of all wallpaper types — from classic prints to feature walls with textured and luxury
           papers.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🍳</div>
+        <div class="service-icon"><i data-lucide="cooking-pot"></i></div>
         <h3>Kitchens</h3>
         <p>Full kitchen makeovers including painting, tiling, and finishing works to give your kitchen a brand new look
           and feel.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🛁</div>
+        <div class="service-icon"><i data-lucide="bath"></i></div>
         <h3>Bathrooms</h3>
         <p>Bathroom renovations and decorating — from fresh tiling and grouting to full suite fitting and damp-resistant
           coatings.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🪵</div>
+        <div class="service-icon"><i data-lucide="layers"></i></div>
         <h3>Flooring</h3>
         <p>Supply and installation of laminate, engineered wood, vinyl, and carpet to complete the look of any room.</p>
       </div>
@@ -247,21 +248,35 @@
         respond within 24 hours.</p>
       <div class="contact-details">
         <div class="contact-item">
-          <div class="contact-item-icon">📞</div>
+          <div class="contact-item-icon">
+            <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+          </div>
           <div>
             <div class="contact-item-label">Phone</div>
             <div class="contact-item-value">07700 000 000</div>
           </div>
         </div>
         <div class="contact-item">
-          <div class="contact-item-icon">📧</div>
+          <div class="contact-item-icon">
+            <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
+          </div>
           <div>
             <div class="contact-item-label">Email</div>
             <div class="contact-item-value">hello@paragondecor.co.uk</div>
           </div>
         </div>
         <div class="contact-item">
-          <div class="contact-item-icon">📍</div>
+          <div class="contact-item-icon">
+            <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </div>
           <div>
             <div class="contact-item-label">Area Covered</div>
             <div class="contact-item-value">London & Home Counties</div>
@@ -324,6 +339,9 @@
     </div>
   </footer>
 
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 
 </html>

@@ -11,11 +11,11 @@
     --warm-white: #FDFAF4;
     --charcoal: #1C1C1C;
     --deep: #111111;
-    --gold: #C9A84C;
-    --gold-light: #E8C96B;
+    --gold: #b88d4c;
+    --gold-light: #f5ec9b;
     --sage: #7A8C6E;
     --muted: #8A8070;
-    --border: rgba(201, 168, 76, 0.25);
+    --border: rgba(184, 141, 76, 0.25);
   }
 
   html {
@@ -346,16 +346,19 @@
     height: 520px;
     object-fit: cover;
     display: block;
+    position: relative;
+    z-index: 2;
   }
 
   .about-img-accent {
     position: absolute;
-    top: -20px;
-    right: -20px;
-    width: 160px;
-    height: 160px;
-    border: 2px solid var(--gold);
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 1px solid var(--gold);
     pointer-events: none;
+    z-index: 1;
   }
 
   .about-content .section-eyebrow {
@@ -392,7 +395,7 @@
     font-weight: 400;
     color: rgba(245, 240, 232, 0.85);
     padding: 10px 0;
-    border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+    border-bottom: 1px solid rgba(184, 141, 76, 0.15);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -551,7 +554,7 @@
 
   .testimonial-card {
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(201, 168, 76, 0.2);
+    border: 1px solid rgba(184, 141, 76, 0.2);
     padding: 36px 32px;
     transition: border-color 0.3s;
   }
@@ -718,7 +721,7 @@
     width: 100%;
     padding: 12px 16px;
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(201, 168, 76, 0.2);
+    border: 1px solid rgba(184, 141, 76, 0.2);
     color: var(--cream);
     font-family: 'Jost', sans-serif;
     font-size: 0.9rem;
@@ -726,6 +729,14 @@
     outline: none;
     transition: border-color 0.3s;
     -webkit-appearance: none;
+  }
+
+  .form-group select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b88d4c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 40px;
   }
 
   .form-group input:focus,
@@ -777,7 +788,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 1px solid rgba(201, 168, 76, 0.15);
+    border-top: 1px solid rgba(184, 141, 76, 0.15);
   }
 
   .footer-logo {

@@ -40,7 +40,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 48px;
-    background: rgba(253, 250, 244, 0.92);
+    background: rgba(17, 17, 17, 0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
@@ -69,7 +69,7 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--muted);
+    color: rgba(245, 240, 232, 0.8);
     transition: color 0.3s;
   }
 
@@ -78,7 +78,7 @@
   }
 
   .nav-cta {
-    background: var(--charcoal);
+    background: transparent;
     color: var(--cream);
     padding: 10px 24px;
     font-size: 0.75rem;
@@ -86,8 +86,8 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
-    transition: background 0.3s;
-    border: 1px solid var(--charcoal);
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+    border: 1px solid var(--cream);
   }
 
   .nav-cta:hover {

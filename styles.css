@@ -676,7 +676,8 @@
   .modal-content {
     width: 100%;
     max-width: 1000px;
-    height: 70vh;
+    max-height: 90vh;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -691,10 +692,55 @@
   .modal-slider {
     position: relative;
     width: 100%;
-    height: 100%;
+    max-height: 80vh;
+    height: auto;
     overflow: hidden;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
     border: 1px solid var(--border);
+  }
+
+  .modal-slider img {
+    width: 100%;
+    max-height: 80vh;
+    height: auto;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .modal-image-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  .modal-image-frame .slider-handle {
+    /* ensure handle stays above images when the frame transforms */
+    z-index: 1030;
+  }
+
+  .modal-zoom-controls {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    z-index: 1020;
+    display: flex;
+    gap: 8px;
+  }
+
+  .modal-zoom-controls button {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--cream);
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .modal-zoom-controls button:hover {
+    background: rgba(0,0,0,0.8);
   }
 
   /* TESTIMONIALS */

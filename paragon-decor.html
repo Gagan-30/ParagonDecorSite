@@ -429,19 +429,26 @@
     <button class="modal-close" aria-label="Close Gallery">&times;</button>
     <div class="modal-content">
       <div class="modal-slider before-after-slider" style="--position: 50%;">
-        <img class="image-after" id="modalAfterImg" src="" alt="After Project">
-        <img class="image-before" id="modalBeforeImg" src="" alt="Before Project">
-        <div class="slider-label label-before">Before</div>
-        <div class="slider-label label-after">After</div>
-        <div class="gallery-item-overlay">
-          <span class="gallery-label" id="modalProjectLabel">Project Title</span>
-        </div>
-        <div class="slider-handle">
-          <div class="handle-button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <div class="modal-image-frame">
+          <img class="image-after" id="modalAfterImg" src="" alt="After Project">
+          <img class="image-before" id="modalBeforeImg" src="" alt="Before Project">
+          <div class="slider-label label-before">Before</div>
+          <div class="slider-label label-after">After</div>
+          <div class="gallery-item-overlay">
+            <span class="gallery-label" id="modalProjectLabel">Project Title</span>
+          </div>
+          <div class="slider-handle">
+            <div class="handle-button">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
           </div>
         </div>
+      </div>
+      <div class="modal-zoom-controls" aria-hidden="false">
+        <button id="zoomOutBtn" title="Zoom out">−</button>
+        <button id="zoomResetBtn" title="Reset zoom">Reset</button>
+        <button id="zoomInBtn" title="Zoom in">+</button>
       </div>
     </div>
   </div>
@@ -620,6 +627,128 @@
         submitBtn.disabled = false;
       });
     });
+
+    // Modal zoom & pan support (applies to both before/after images together)
+    (function(){
+      const zoomInBtn = document.getElementById('zoomInBtn');
+      const zoomOutBtn = document.getElementById('zoomOutBtn');
+      const zoomResetBtn = document.getElementById('zoomResetBtn');
+      const modalFrame = modalSlider.querySelector('.modal-image-frame');
+      let scale = 1;
+      let minScale = 1;
+      let maxScale = 4;
+      let originX = 0;
+      let originY = 0;
+      let isPanning = false;
+      let startX = 0, startY = 0;
+      let translateX = 0, translateY = 0;
+      let lastTouchDist = null;
+
+      function applyTransform(){
+        if (modalFrame) {
+          modalFrame.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+          modalFrame.style.transformOrigin = `${originX}px ${originY}px`;
+        }
+      }
+
+      function resetZoom(){
+        scale = 1; translateX = 0; translateY = 0; lastTouchDist = null; applyTransform();
+      }
+
+      function changeScale(delta, centerX, centerY){
+        const prevScale = scale;
+        scale = Math.min(maxScale, Math.max(minScale, scale + delta));
+        // adjust translate so zoom centers on pointer
+        const rect = modalFrame ? modalFrame.getBoundingClientRect() : modalSlider.getBoundingClientRect();
+        const cx = (centerX - rect.left);
+        const cy = (centerY - rect.top);
+        // move translate to keep the focus
+        translateX -= (cx) * (scale/prevScale - 1);
+        translateY -= (cy) * (scale/prevScale - 1);
+        applyTransform();
+      }
+
+      // Wheel zoom
+      modalSlider.addEventListener('wheel', (e) => {
+        if (!modal.classList.contains('active')) return;
+        e.preventDefault();
+        const delta = -Math.sign(e.deltaY) * 0.15;
+        changeScale(delta, e.clientX, e.clientY);
+      }, { passive: false });
+
+      // Double click to toggle
+      modalSlider.addEventListener('dblclick', (e) => {
+        if (scale === 1) {
+          changeScale(1.2, e.clientX, e.clientY);
+        } else {
+          resetZoom();
+        }
+      });
+
+      // Mouse panning
+      modalSlider.addEventListener('mousedown', (e) => {
+        if (scale <= 1) return;
+        isPanning = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+        modalSlider.style.cursor = 'grabbing';
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isPanning) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        applyTransform();
+      });
+      window.addEventListener('mouseup', () => { isPanning = false; modalSlider.style.cursor = ''; });
+
+      // Touch: pinch to zoom and pan
+      modalSlider.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+          lastTouchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+        } else if (e.touches.length === 1 && scale > 1) {
+          isPanning = true;
+          startX = e.touches[0].clientX - translateX;
+          startY = e.touches[0].clientY - translateY;
+        }
+      }, { passive: true });
+
+      modalSlider.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+          e.preventDefault();
+          const dist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          const diff = (dist - lastTouchDist) / 200; // scale sensitivity
+          changeScale(diff, (e.touches[0].clientX + e.touches[1].clientX)/2, (e.touches[0].clientY + e.touches[1].clientY)/2);
+          lastTouchDist = dist;
+        } else if (e.touches.length === 1 && isPanning) {
+          translateX = e.touches[0].clientX - startX;
+          translateY = e.touches[0].clientY - startY;
+          applyTransform();
+        }
+      }, { passive: false });
+
+      modalSlider.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) lastTouchDist = null;
+        if (e.touches.length === 0) isPanning = false;
+      });
+
+      // Zoom buttons
+      zoomInBtn.addEventListener('click', () => changeScale(0.3, modalSlider.getBoundingClientRect().left + modalSlider.clientWidth/2, modalSlider.getBoundingClientRect().top + modalSlider.clientHeight/2));
+      zoomOutBtn.addEventListener('click', () => changeScale(-0.3, modalSlider.getBoundingClientRect().left + modalSlider.clientWidth/2, modalSlider.getBoundingClientRect().top + modalSlider.clientHeight/2));
+      zoomResetBtn.addEventListener('click', resetZoom);
+
+      // Reset zoom when modal closed/opened
+      modalClose.addEventListener('click', resetZoom);
+      modal.addEventListener('click', (e) => { if (e.target === modal) resetZoom(); });
+      // Also reset when opening a new image
+      const originalOpen = openLightbox;
+      window.openLightbox = function(gridSlider){ resetZoom(); originalOpen(gridSlider); };
+    })();
   </script>
 </body>
 

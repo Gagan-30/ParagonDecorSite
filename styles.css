@@ -39,7 +39,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 48px;
+    padding: clamp(14px, 2vw, 20px) clamp(20px, 4vw, 48px);
     background: rgba(17, 17, 17, 0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
@@ -109,7 +109,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 80px 64px 80px 80px;
+    padding: clamp(56px, 7vw, 80px) clamp(24px, 5vw, 64px) clamp(48px, 6vw, 80px);
     position: relative;
   }
 
@@ -292,7 +292,7 @@
 
   /* SECTION SHARED */
   section {
-    padding: 100px 80px;
+    padding: clamp(64px, 8vw, 100px) clamp(24px, 5vw, 80px);
   }
 
   .section-eyebrow {
@@ -507,60 +507,30 @@
     grid-row: span 2;
   }
 
-  .before-after-slider {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  .gallery-item {
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    --position: 50%;
+    background: #111;
   }
 
-  /* Before & After Images */
-  .before-after-slider img.image-after {
+  .gallery-item.project-card {
+    isolation: isolate;
+  }
+
+  .gallery-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
+    transition: transform 0.5s ease;
   }
 
-  .before-after-slider img.image-before {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-    clip-path: inset(0 calc(100% - var(--position)) 0 0);
-    z-index: 1;
+  .gallery-item:hover .gallery-cover {
+    transform: scale(1.04);
   }
 
-  /* Slider labels */
-  .slider-label {
-    position: absolute;
-    top: 15px;
-    background: rgba(28, 28, 28, 0.75);
-    color: var(--cream);
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    z-index: 2;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .label-before {
-    left: 15px;
-  }
-
-  .label-after {
-    right: 15px;
-  }
-
-  /* Project Label Overlay */
   .gallery-item-overlay {
     position: absolute;
     bottom: 15px;
@@ -581,72 +551,18 @@
     color: white;
   }
 
-  /* Slider Handle styling */
-  .slider-handle {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: var(--position);
-    transform: translateX(-50%);
-    width: 2px;
-    background: var(--gold);
-    z-index: 3;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .handle-button {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--charcoal);
-    border: 2px solid var(--gold);
-    color: var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    transition: background-color 0.25s, color 0.25s, transform 0.25s;
-    pointer-events: auto;
-    cursor: ew-resize;
-  }
-
-  .before-after-slider:hover .handle-button {
-    background: var(--gold);
-    color: var(--charcoal);
-    transform: scale(1.1);
-  }
-
-  .handle-button svg {
-    width: 10px;
-    height: 10px;
-    stroke-width: 3;
-    display: block;
-  }
-
-  /* Active / Sliding state behavior: fade out UI elements to let user see transformation */
-  .before-after-slider.sliding .slider-label,
-  .before-after-slider.sliding .gallery-item-overlay {
-    opacity: 0;
-  }
-
-  /* GALLERY LIGHTBOX MODAL */
   .gallery-modal {
     position: fixed;
     inset: 0;
     z-index: 1000;
-    background: rgba(17, 17, 17, 0.95);
-    backdrop-filter: blur(12px);
+    background: rgba(8, 8, 8, 0.96);
+    backdrop-filter: blur(14px);
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 40px;
+    padding: clamp(16px, 3vw, 40px);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease;
   }
 
   .gallery-modal.active {
@@ -656,8 +572,8 @@
 
   .modal-close {
     position: absolute;
-    top: 30px;
-    right: 40px;
+    top: 18px;
+    right: 22px;
     background: transparent;
     border: none;
     color: var(--cream);
@@ -670,77 +586,142 @@
 
   .modal-close:hover {
     color: var(--gold);
-    transform: scale(1.1);
+    transform: scale(1.08);
   }
 
   .modal-content {
-    width: 100%;
-    max-width: 1000px;
-    max-height: 90vh;
-    height: auto;
+    width: min(1200px, 100%);
+    height: 100%;
+    max-height: calc(100vh - 32px);
     display: flex;
     align-items: center;
     justify-content: center;
-    transform: scale(0.95);
-    transition: transform 0.3s ease;
   }
 
-  .gallery-modal.active .modal-content {
-    transform: scale(1);
-  }
-
-  .modal-slider {
-    position: relative;
-    width: 100%;
-    max-height: 80vh;
-    height: auto;
-    overflow: hidden;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border);
-  }
-
-  .modal-slider img {
-    width: 100%;
-    max-height: 80vh;
-    height: auto;
-    object-fit: contain;
-    pointer-events: none;
-  }
-
-  .modal-image-frame {
-    position: relative;
+  .project-gallery-shell {
     width: 100%;
     height: 100%;
-    transform-origin: center center;
-    will-change: transform;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 18px;
   }
 
-  .modal-image-frame .slider-handle {
-    /* ensure handle stays above images when the frame transforms */
-    z-index: 1030;
-  }
-
-  .modal-zoom-controls {
-    position: absolute;
-    right: 18px;
-    bottom: 18px;
-    z-index: 1020;
+  .project-gallery-header {
     display: flex;
-    gap: 8px;
-  }
-
-  .modal-zoom-controls button {
-    background: rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.08);
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
     color: var(--cream);
-    padding: 8px 10px;
-    font-size: 0.95rem;
-    border-radius: 6px;
-    cursor: pointer;
   }
 
-  .modal-zoom-controls button:hover {
-    background: rgba(0,0,0,0.8);
+  .project-gallery-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+
+  .project-gallery-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    font-weight: 700;
+    margin: 0;
+    color: var(--cream);
+  }
+
+  .project-gallery-count {
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.7);
+    white-space: nowrap;
+  }
+
+  .project-gallery-stage {
+    position: relative;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
+  }
+
+  .project-gallery-stage img {
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 220px);
+    object-fit: contain;
+    display: block;
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .project-gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(0, 0, 0, 0.5);
+    color: var(--cream);
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .project-gallery-nav:hover {
+    background: rgba(184, 141, 76, 0.9);
+    color: #000;
+  }
+
+  .project-gallery-nav.prev {
+    left: 16px;
+  }
+
+  .project-gallery-nav.next {
+    right: 16px;
+  }
+
+  .project-gallery-thumbs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .project-thumb {
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    cursor: pointer;
+    overflow: hidden;
+    height: 78px;
+  }
+
+  .project-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.72;
+    transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .project-thumb:hover img,
+  .project-thumb.active img {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+
+  .project-thumb.active {
+    border-color: var(--gold);
   }
 
   /* TESTIMONIALS */
@@ -1182,6 +1163,53 @@
   }
 
   /* RESPONSIVE */
+  @media (max-width: 1200px) {
+    #hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .hero-left {
+      padding: clamp(72px, 10vw, 96px) clamp(24px, 5vw, 48px) 48px;
+    }
+
+    .hero-right {
+      min-height: 420px;
+    }
+
+    #about {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    .about-img-wrap img {
+      height: 420px;
+    }
+
+    .services-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+
+    .gallery-item:first-child {
+      grid-column: span 1;
+      grid-row: span 1;
+      height: 280px;
+    }
+
+    .gallery-item {
+      height: 280px;
+    }
+
+    #contact {
+      gap: 48px;
+    }
+  }
+
   @media (max-width: 900px) {
     nav {
       padding: 16px 24px;
@@ -1192,33 +1220,16 @@
     }
 
     #hero {
-      grid-template-columns: 1fr;
-      min-height: auto;
-    }
-
-    .hero-left {
-      padding: 100px 24px 60px;
+      padding-top: 72px;
     }
 
     .hero-right {
       height: 360px;
-    }
-
-    #about {
-      grid-template-columns: 1fr;
-      padding: 60px 24px;
-    }
-
-    .about-img-wrap img {
-      height: 320px;
+      min-height: 360px;
     }
 
     #services {
       padding: 60px 24px;
-    }
-
-    .services-grid {
-      grid-template-columns: 1fr 1fr;
     }
 
     #gallery {
@@ -1226,18 +1237,14 @@
     }
 
     .gallery-grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       grid-template-rows: auto;
     }
 
     .gallery-item:first-child {
-      grid-column: span 2;
+      grid-column: span 1;
       grid-row: span 1;
-      height: 320px;
-    }
-
-    .gallery-item {
-      height: 250px;
+      height: 280px;
     }
 
     #testimonials {
@@ -1268,6 +1275,55 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 16px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .services-grid,
+    .gallery-grid,
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gallery-item:first-child {
+      grid-column: span 1;
+      grid-row: span 1;
+      height: 240px;
+    }
+
+    .gallery-item {
+      height: 240px;
+    }
+
+    .testimonial-card {
+      padding: 28px 22px;
+    }
+
+    .project-gallery-shell {
+      gap: 14px;
+    }
+
+    .project-gallery-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .project-gallery-stage img {
+      max-height: calc(100vh - 190px);
+    }
+
+    .project-gallery-nav {
+      width: 40px;
+      height: 40px;
+      font-size: 1.6rem;
+    }
+
+    .project-gallery-thumbs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .project-thumb {
+      height: 66px;
     }
   }
 
@@ -1453,5 +1509,26 @@
 
     footer {
       padding: 28px 16px;
+    }
+
+    .project-gallery-stage img {
+      max-height: calc(100vh - 170px);
+    }
+
+    .project-gallery-thumbs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .project-thumb {
+      height: 58px;
+    }
+
+    .project-gallery-nav.prev {
+      left: 10px;
+    }
+
+    .project-gallery-nav.next {
+      right: 10px;
     }
   }

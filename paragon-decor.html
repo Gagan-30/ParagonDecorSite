@@ -413,6 +413,7 @@
   <script>
     lucide.createIcons();
 
+    // Project gallery data structure
     const projectGalleryData = {
       'living-room': {
         title: '',
@@ -461,6 +462,7 @@
       }
     };
 
+    // Flatten the project gallery data into a single array for easier navigation
     const gallerySequence = Object.entries(projectGalleryData).flatMap(([projectKey, project]) =>
       project.images.map((imageUrl, imageIndex) => ({
         projectKey,
@@ -485,6 +487,7 @@
     let touchStartX = 0;
     let touchEndX = 0;
 
+    // Function to render the current project image and update the modal
     const renderProjectImage = () => {
       const activeItem = gallerySequence[activeGalleryIndex];
       if (!activeItem) return;
@@ -536,6 +539,7 @@
       activeGalleryIndex = 0;
     };
 
+    // Function to move to the next or previous image in the gallery
     const moveImage = (direction) => {
       if (!gallerySequence.length) return;
       activeGalleryIndex = (activeGalleryIndex + direction + gallerySequence.length) % gallerySequence.length;
@@ -556,6 +560,7 @@
       moveImage(1);
     });
 
+    // Function to scroll the thumbnail strip left or right
     const scrollThumbnails = (direction) => {
       modalThumbStrip.scrollBy({
         left: direction * Math.max(modalThumbStrip.clientWidth * 0.75, 220),
@@ -597,7 +602,7 @@
       if (e.key === 'ArrowRight') moveImage(1);
     });
 
-    // Form Submission Logic using Web3Forms AJAX
+    // Form Submission Logic using Web3Forms AJAX Email API
     const contactForm = document.getElementById('contactForm');
     const formResult = document.getElementById('form-result');
 

@@ -691,12 +691,17 @@
   }
 
   .project-gallery-thumbs {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: nowrap;
     gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
   }
 
   .project-thumb {
+    flex: 0 0 96px;
     padding: 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: transparent;
@@ -1319,10 +1324,13 @@
     }
 
     .project-gallery-thumbs {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 8px;
     }
 
     .project-thumb {
+      flex-basis: 84px;
       height: 66px;
     }
   }
@@ -1516,11 +1524,13 @@
     }
 
     .project-gallery-thumbs {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      flex-wrap: nowrap;
+      overflow-x: auto;
       gap: 8px;
     }
 
     .project-thumb {
+      flex-basis: 76px;
       height: 58px;
     }
 

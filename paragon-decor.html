@@ -447,6 +447,16 @@
       }
     };
 
+    const gallerySequence = Object.entries(projectGalleryData).flatMap(([projectKey, project]) =>
+      project.images.map((imageUrl, imageIndex) => ({
+        projectKey,
+        projectTitle: project.title,
+        imageUrl,
+        imageIndex,
+        imageCount: project.images.length
+      }))
+    );
+
     const modal = document.getElementById('galleryModal');
     const modalClose = modal.querySelector('.modal-close');
     const modalProjectLabel = document.getElementById('modalProjectLabel');
@@ -455,38 +465,34 @@
     const modalThumbStrip = document.getElementById('modalThumbStrip');
     const galleryPrevBtn = document.getElementById('galleryPrevBtn');
     const galleryNextBtn = document.getElementById('galleryNextBtn');
-    let activeProjectKey = null;
-    let activeProjectIndex = 0;
+    let activeGalleryIndex = 0;
     let touchStartX = 0;
     let touchEndX = 0;
 
     const renderProjectImage = () => {
-      const project = projectGalleryData[activeProjectKey];
-      if (!project) return;
+      const activeItem = gallerySequence[activeGalleryIndex];
+      if (!activeItem) return;
 
-      const imageUrl = project.images[activeProjectIndex];
-      modalGalleryImg.src = imageUrl;
-      modalGalleryImg.alt = `${project.title} image ${activeProjectIndex + 1}`;
-      modalProjectLabel.textContent = project.title;
-      modalProjectCount.textContent = `${activeProjectIndex + 1} / ${project.images.length}`;
+      modalGalleryImg.src = activeItem.imageUrl;
+      modalGalleryImg.alt = `${activeItem.projectTitle} image ${activeItem.imageIndex + 1}`;
+      modalProjectLabel.textContent = activeItem.projectTitle;
+      modalProjectCount.textContent = `${activeGalleryIndex + 1} / ${gallerySequence.length}`;
 
       modalThumbStrip.querySelectorAll('button').forEach((button, index) => {
-        button.classList.toggle('active', index === activeProjectIndex);
+        button.classList.toggle('active', index === activeGalleryIndex);
       });
     };
 
     const buildThumbnails = () => {
-      const project = projectGalleryData[activeProjectKey];
       modalThumbStrip.innerHTML = '';
-      if (!project) return;
 
-      project.images.forEach((imageUrl, index) => {
+      gallerySequence.forEach((item, index) => {
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'project-thumb';
-        button.innerHTML = `<img src="${imageUrl}" alt="${project.title} thumbnail ${index + 1}">`;
+        button.innerHTML = `<img src="${item.imageUrl}" alt="${item.projectTitle} thumbnail ${index + 1}">`;
         button.addEventListener('click', () => {
-          activeProjectIndex = index;
+          activeGalleryIndex = index;
           renderProjectImage();
         });
         modalThumbStrip.appendChild(button);
@@ -495,8 +501,8 @@
 
     const openLightbox = (projectKey) => {
       if (!projectGalleryData[projectKey]) return;
-      activeProjectKey = projectKey;
-      activeProjectIndex = 0;
+      activeGalleryIndex = gallerySequence.findIndex((item) => item.projectKey === projectKey);
+      if (activeGalleryIndex < 0) activeGalleryIndex = 0;
       buildThumbnails();
       renderProjectImage();
       modal.classList.add('active');
@@ -506,14 +512,12 @@
     const closeLightbox = () => {
       modal.classList.remove('active');
       document.body.style.overflow = '';
-      activeProjectKey = null;
-      activeProjectIndex = 0;
+      activeGalleryIndex = 0;
     };
 
     const moveImage = (direction) => {
-      const project = projectGalleryData[activeProjectKey];
-      if (!project) return;
-      activeProjectIndex = (activeProjectIndex + direction + project.images.length) % project.images.length;
+      if (!gallerySequence.length) return;
+      activeGalleryIndex = (activeGalleryIndex + direction + gallerySequence.length) % gallerySequence.length;
       renderProjectImage();
     };
 

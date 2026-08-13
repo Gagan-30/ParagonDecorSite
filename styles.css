@@ -1284,6 +1284,7 @@
   }
 
   @media (max-width: 640px) {
+
     .services-grid,
     .gallery-grid,
     .testimonials-grid {
@@ -1394,7 +1395,7 @@
       flex-wrap: wrap;
     }
 
-    .hero-stats > div {
+    .hero-stats>div {
       min-width: calc(50% - 10px);
       flex: 1 1 calc(50% - 10px);
     }
@@ -1540,5 +1541,77 @@
 
     .project-gallery-nav.next {
       right: 10px;
+    }
+  }
+
+  /* Gallery thumbnail selector: use navigation buttons instead of a visible scrollbar */
+  .project-gallery-thumbs-wrap {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .project-gallery-thumbs {
+    min-width: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 2px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+  }
+
+  .project-gallery-thumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-gallery-thumbs-nav {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(0, 0, 0, 0.5);
+    color: var(--cream);
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .project-gallery-thumbs-nav:hover {
+    background: rgba(184, 141, 76, 0.9);
+    border-color: var(--gold);
+    color: #000;
+  }
+
+  .project-gallery-thumbs-nav:focus-visible {
+    outline: 2px solid var(--gold-light);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .project-gallery-thumbs-wrap {
+      grid-template-columns: 36px minmax(0, 1fr) 36px;
+      gap: 8px;
+    }
+
+    .project-gallery-thumbs-nav {
+      width: 36px;
+      height: 36px;
+      flex-basis: 36px;
+      font-size: 1.5rem;
+    }
+
+    .project-gallery-thumbs {
+      gap: 8px;
     }
   }

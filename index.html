@@ -245,6 +245,7 @@
         </div>
       </div>
     </div>
+    <div class="testimonial-dots" id="testimonialDots"></div>
     <a href="https://share.google/3IFYHVE02vtBpTu1t" class="google-reviews-link" target="_blank"
       rel="noopener noreferrer">
       See More
@@ -651,6 +652,93 @@
           submitBtn.disabled = false;
         });
     });
+
+    // Testimonials Carousel Auto-scroll and manual navigation
+    const testimonialsGrid = document.querySelector('.testimonials-grid');
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    const dotsContainer = document.getElementById('testimonialDots');
+    let testimonialIndex = 0;
+    let autoScrollTimer = null;
+
+    if (testimonialsGrid && testimonialCards.length && dotsContainer) {
+      // Create dot indicators
+      testimonialCards.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = `testimonial-dot${idx === 0 ? ' active' : ''}`;
+        dot.setAttribute('aria-label', `Go to testimonial ${idx + 1}`);
+        dot.addEventListener('click', () => {
+          scrollToTestimonial(idx);
+          resetAutoScroll();
+        });
+        dotsContainer.appendChild(dot);
+      });
+
+      const dots = dotsContainer.querySelectorAll('.testimonial-dot');
+
+      function updateActiveDot(index) {
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === index);
+        });
+      }
+
+      function scrollToTestimonial(index) {
+        if (window.innerWidth > 768) return;
+        testimonialIndex = index;
+        const cardWidth = testimonialCards[0].offsetWidth;
+        testimonialsGrid.scrollTo({
+          left: index * (cardWidth + 16), // 16px is the grid gap
+          behavior: 'smooth'
+        });
+        updateActiveDot(index);
+      }
+
+      function startAutoScroll() {
+        if (autoScrollTimer) return;
+        autoScrollTimer = setInterval(() => {
+          if (window.innerWidth <= 768) {
+            testimonialIndex = (testimonialIndex + 1) % testimonialCards.length;
+            scrollToTestimonial(testimonialIndex);
+          }
+        }, 5000);
+      }
+
+      function stopAutoScroll() {
+        if (autoScrollTimer) {
+          clearInterval(autoScrollTimer);
+          autoScrollTimer = null;
+        }
+      }
+
+      function resetAutoScroll() {
+        stopAutoScroll();
+        startAutoScroll();
+      }
+
+      // Sync dots on manual swipe or scroll
+      let scrollTimeout;
+      testimonialsGrid.addEventListener('scroll', () => {
+        if (window.innerWidth > 768) return;
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          const cardWidth = testimonialCards[0].offsetWidth;
+          const scrollPosition = testimonialsGrid.scrollLeft;
+          const newIndex = Math.round(scrollPosition / (cardWidth + 16));
+          if (newIndex >= 0 && newIndex < testimonialCards.length && newIndex !== testimonialIndex) {
+            testimonialIndex = newIndex;
+            updateActiveDot(testimonialIndex);
+          }
+        }, 100);
+      }, { passive: true });
+
+      // Pause auto scroll on touch or hover
+      testimonialsGrid.addEventListener('mouseenter', stopAutoScroll);
+      testimonialsGrid.addEventListener('mouseleave', startAutoScroll);
+      testimonialsGrid.addEventListener('touchstart', stopAutoScroll, { passive: true });
+      testimonialsGrid.addEventListener('touchend', startAutoScroll, { passive: true });
+
+      startAutoScroll();
+    }
 
   </script>
 </body>

@@ -980,6 +980,11 @@
     height: 24px;
   }
 
+  .social-link-logo-whatsapp {
+    width: 24px;
+    height: 24px;
+  }
+
   .social-link-copy {
     display: flex;
     flex-direction: column;
@@ -1565,6 +1570,11 @@
     }
 
     .social-link-logo-instagram {
+      width: 22px;
+      height: 22px;
+    }
+
+    .social-link-logo-whatsapp {
       width: 22px;
       height: 22px;
     }

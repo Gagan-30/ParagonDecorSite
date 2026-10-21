@@ -583,7 +583,8 @@
     const thumbNextBtn = document.getElementById('thumbNextBtn');
     let activeGalleryIndex = 0;
     let touchStartX = 0;
-    let touchEndX = 0;
+    let touchStartY = 0;
+    let isSingleFingerSwipe = false;
 
     // Function to render the current project image and update the modal
     const renderProjectImage = () => {
@@ -688,16 +689,40 @@
     });
 
     modalGalleryImg.addEventListener('touchstart', (e) => {
+      // A pinch can end with one finger well away from where the first finger
+      // began. Never interpret that final touch as a gallery swipe.
+      if (e.touches.length !== 1) {
+        isSingleFingerSwipe = false;
+        return;
+      }
       touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isSingleFingerSwipe = true;
+    }, { passive: true });
+
+    modalGalleryImg.addEventListener('touchmove', (e) => {
+      if (e.touches.length !== 1) isSingleFingerSwipe = false;
     }, { passive: true });
 
     modalGalleryImg.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].clientX;
-      const delta = touchEndX - touchStartX;
-      if (Math.abs(delta) > 40) {
-        moveImage(delta < 0 ? 1 : -1);
+      if (!isSingleFingerSwipe || e.changedTouches.length !== 1 || e.touches.length !== 0) {
+        isSingleFingerSwipe = false;
+        return;
+      }
+
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+      isSingleFingerSwipe = false;
+
+      // Only deliberate, predominantly horizontal one-finger gestures navigate.
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        moveImage(deltaX < 0 ? 1 : -1);
       }
     });
+
+    modalGalleryImg.addEventListener('touchcancel', () => {
+      isSingleFingerSwipe = false;
+    }, { passive: true });
 
     window.addEventListener('keydown', (e) => {
       if (!modal.classList.contains('active')) return;
